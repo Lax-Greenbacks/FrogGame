@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<!-- Myles Barrett's Frog Game
+	 Created June 23, 2023 -->
+
+<head>
+	<title>Cross the River</title>
+	
+	<style>
+	</style>
+</head>
+
+<body>
+	<img id="defaultImg" width="1000" src="scene1.png" alt="1"/>
+	<p id="p1">Hello</p>
+	<input type="text" id="myText" value="Type something...">
+	<button onclick="sendText()">Enter</button>
+
+	<script>
+		//Dictionary used to connect prompts to scene changes
+		var scene_dictionary=
+		{ 
+			"look around":"scene_look",
+			"pick up rock":"scene_rock_moved", 
+			"move rock":"scene_rock_moved", 
+			"swim":"scene_drowned"
+		};
+		
+		//Object that keeps track of the state of several objects in the game
+		const state = 
+		{
+			rock_moved:"false"
+		};
+		
+		function sendText()
+		{
+			var text = document.getElementById("myText").value;
+			
+			if(text in scene_dictionary)
+			{
+				if(scene_dictionary[text] == "scene_look")
+				{
+					document.getElementById("p1").innerHTML = "There is a river in front of you. Nearby there is a rock.";
+				}
+				
+				else if(scene_dictionary[text] == "scene_rock_moved")
+				{
+					document.getElementById('defaultImg').src="scene2.png";
+					document.getElementById("p1").innerHTML = "You moved the rock.";
+					state.rock_moved = "true";
+					//console.log("hey im at 1"); <-- this is how logging can work with inspect element
+				}
+			
+				else if(scene_dictionary[text] == "scene_drowned")
+				{
+					if(state.rock_moved == "true")
+						document.getElementById('defaultImg').src="scene4.png";
+						
+					else
+						document.getElementById('defaultImg').src="scene3.png";
+						
+					document.getElementById("p1").innerHTML = "You drowned :(";
+				}
+			
+				else
+					document.getElementById("p1").innerHTML = "I don't know what this means.";
+			}
+			
+			else
+				document.getElementById("p1").innerHTML = "I don't know what this means.";
+		};
+	</script>
+	
+</body>
+</html>
