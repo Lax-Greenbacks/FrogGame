@@ -39,6 +39,7 @@
 				"phrase":"You're a frog",
 				"actions":
 				{
+					"grab fishing rod":"state_by_river_no_fishing_rod",
 					"move rock":"state_by_river_no_rock",
 					"swim":"state_drowning"
 				},
@@ -50,29 +51,98 @@
 				"phrase":"You moved the rock",
 				"actions":
 				{
-					"swim":"state_drowning_no_rock"
+					"grab fishing rod":"state_by_river_no_fishing_rod_no_rock",
+					"grab worm":"state_by_river_no_worm",
+					"swim":"state_drowning"
+				},
+			},
+			
+			"state_by_river_no_worm":
+			{
+				"png":"scene3.png",
+				"phrase":"You got the worm",
+				"actions":
+				{
+					"grab fishing rod":"state_by_river_no_fishing_rod_no_worm",
+					"swim":"state_drowning"
+				},
+			},
+			
+			"state_by_river_no_fishing_rod":
+			{
+				"png":"scene4.png",
+				"phrase":"You got the fishing rod",
+				"actions":
+				{
+					"move rock":"state_by_river_no_fishing_rod_no_rock",
+					"swim":"state_drowning"
+				},
+			},
+			
+			"state_by_river_no_fishing_rod_no_rock":
+			{
+				"png":"scene5.png",
+				"phrase":"You got the fishing rod and you moved the rock.",
+				"actions":
+				{
+					"grab worm":"state_by_river_no_fishing_rod_no_worm",
+					"swim":"state_drowning"
+				},
+			},
+			
+			"state_by_river_no_fishing_rod_no_worm":
+			{
+				"png":"scene6.png",
+				"phrase":"You got the fishing rod and the worm",
+				"actions":
+				{
+					"go fishing":"state_by_river_mitt",
+					"swim":"state_drowning"
+				},
+			},
+			
+			"state_by_river_mitt":
+			{
+				"png":"scene7.png",
+				"phrase":"You fished up an oven mitt",
+				"actions":
+				{
+					"give scorpion oven mitt":"state_by_river_friend",
+					"swim":"state_drowning"
+				},
+			},
+			
+			"state_by_river_friend":
+			{
+				"png":"scene8.png",
+				"phrase":"The scorpion thanks you for this fashionable new gift.",
+				"actions":
+				{
+					"swim":"state_win"
 				},
 			},
 			
 			"state_drowning":
 			{
-				"png":"scene3.png",
-				"phrase":"You drowned. Type restart to try again.",
+				"png":"scene9.png",
+				"phrase":"You try to swim across the river. ''Sorry it's in my nature.'' The scorpion pokes you and you both drown. Type restart to try again.",
 				"actions":
 				{
 					"restart":"state_startscreen"
 				},
 			},
 			
-			"state_drowning_no_rock":
+			"state_win":
 			{
-				"png":"scene4.png",
-				"phrase":"You drowned. Type restart to try again.",
+				"png":"winscreen.png",
+				"phrase":"You won the game!!!",
 				"actions":
 				{
 					"restart":"state_startscreen"
 				},
 			},
+			
+
 		};
 		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		
