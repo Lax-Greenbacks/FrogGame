@@ -19,7 +19,7 @@
 
 	<script>
 		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		//The following is a dictionary that lists the states and their information
+		//The following is a dictionary of dictionaries that lists the states and their information
 		
 		var scene_dictionary=
 		{ 
@@ -39,7 +39,7 @@
 				"phrase":"You're a frog",
 				"actions":
 				{
-					"move_rock":"state_by_river_no_rock",
+					"move rock":"state_by_river_no_rock",
 					"swim":"state_drowning"
 				},
 			},
@@ -76,11 +76,8 @@
 		};
 		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		
-		//Object that keeps track of the state
-		const state = 
-		{
-			curr_state:"state_startscreen"
-		};
+		//Variable that keeps track of the current state
+		var state = "state_startscreen";
 		
 		//This block of code lets the player use the enter key instead of needing to press the button
 		var input = document.getElementById("myText");
@@ -97,16 +94,16 @@
 		function sendText()
 		{
 			var text = document.getElementById("myText").value;
-			var current_state = state.curr_state;
 			
-			if(current_state in scene_dictionary)
+			if(state in scene_dictionary)
 			{
-				if(text in scene_dictionary[current_state][actions])
+				if(text in scene_dictionary[state]["actions"])
 				{
-					document.getElementById('defaultImg').src=scene_dictionary[current_state][png];
-					document.getElementById("p1").innerHTML = scene_dictionary[current_state][phrase];
-					state.curr_state = scene_dictionary[current_state][actions][text];
+					state = scene_dictionary[state]["actions"][text];
+					document.getElementById('defaultImg').src=scene_dictionary[state]["png"];
+					document.getElementById("p1").innerHTML = scene_dictionary[state]["phrase"];
 				}
+				
 				else
 					document.getElementById("p1").innerHTML = "I don't know what this means.";
 			}
