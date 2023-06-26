@@ -13,59 +13,73 @@
 
 <body>
 	<img id="defaultImg" width="1000" src="startscreen.png" alt="1"/>
-	<p id="p1">To start the game type "play"!</p>
+	<p id="p1">To start the game type play</p>
 	<input type="text" id="myText" value="Type something...">
 	<button id="button" onclick="sendText()">Enter</button>
 
 	<script>
-		//Dictionary used to connect prompts to scene changes
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//The following is a dictionary that lists the states and their information
+		
 		var scene_dictionary=
 		{ 
-			"play":"scene_start",
-			"look around":"scene_look",
-			"pick up rock":"scene_rock_moved", 
-			"move rock":"scene_rock_moved", 
-			"swim":"scene_drowned"
+			"state_startscreen":
+			{ 
+				"png":"startscreen.png",
+				"phrase":"To start the game type play",
+				"actions":
+				{
+					"play":"state_by_river"
+				},
+			},
+			
+			"state_by_river":
+			{
+				"png":"scene1.png",
+				"phrase":"You're a frog",
+				"actions":
+				{
+					"move_rock":"state_by_river_no_rock",
+					"swim":"state_drowning"
+				},
+			},
+			
+			"state_by_river_no_rock":
+			{
+				"png":"scene2.png",
+				"phrase":"You moved the rock",
+				"actions":
+				{
+					"swim":"state_drowning_no_rock"
+				},
+			},
+			
+			"state_drowning":
+			{
+				"png":"scene3.png",
+				"phrase":"You drowned. Type restart to try again.",
+				"actions":
+				{
+					"restart":"state_startscreen"
+				},
+			},
+			
+			"state_drowning_no_rock":
+			{
+				"png":"scene4.png",
+				"phrase":"You drowned. Type restart to try again.",
+				"actions":
+				{
+					"restart":"state_startscreen"
+				},
+			},
 		};
-		
 		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		//The following are dictionaries that list the state and their available moves
-		var state_startscreen=
-		{ 
-			"play":"scene1.png",
-			"new_text": "To start the game type play"
-		};
 		
-		var state_by_river=
-		{ 
-			"look around":"scene_look",
-			"pick up rock":"scene_rock_moved", 
-			"move rock":"scene_rock_moved", 
-			"swim":"scene_drowned"
-		};
-		
-		var state_by_river_no_rock=
-		{ 
-			"look around":"scene_look",
-			"swim":"scene_drowned"
-		};
-		
-		var state_drowning=
-		{ 
-			"restart":"scene_start"
-		};
-		
-		var state_drowning_no_rock=
-		{ 
-			"restart":"scene_start"
-		};
-		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		
-		//Object that keeps track of the state of several objects in the game
+		//Object that keeps track of the state
 		const state = 
 		{
-			curr_state:"state_startscreen",
-			rock_moved:"false"
+			curr_state:"state_startscreen"
 		};
 		
 		//This block of code lets the player use the enter key instead of needing to press the button
@@ -83,59 +97,23 @@
 		function sendText()
 		{
 			var text = document.getElementById("myText").value;
-			current_state = state.curr_state;
+			var current_state = state.curr_state;
 			
-			if(text in current_state)
+			if(current_state in scene_dictionary)
 			{
-				document.getElementById('defaultImg').src=current_state[text];
+				if(text in scene_dictionary[current_state][actions])
+				{
+					document.getElementById('defaultImg').src=scene_dictionary[current_state][png];
+					document.getElementById("p1").innerHTML = scene_dictionary[current_state][phrase];
+					state.curr_state = scene_dictionary[current_state][actions][text];
+				}
+				else
+					document.getElementById("p1").innerHTML = "I don't know what this means.";
 			}
 			
 			else
-				document.getElementById("p1").innerHTML = "I don't know what this means.";
-			
-			<!-- if(text in scene_dictionary) -->
-			<!-- { -->
-				<!-- if(scene_dictionary[text] == "scene_start") -->
-				<!-- { -->
-					<!-- document.getElementById('defaultImg').src="scene1.png"; -->
-					<!-- document.getElementById("p1").innerHTML = "You are a frog."; -->
-					<!-- //console.log("hey im at 1"); <-- this is how logging can work with inspect element -->
-				<!-- } -->
-				<!-- else if(scene_dictionary[text] == "scene_look") -->
-				<!-- { -->
-					<!-- document.getElementById("p1").innerHTML = "There is a river in front of you. Nearby there is a rock."; -->
-				<!-- } -->
-				
-				<!-- else if(scene_dictionary[text] == "scene_rock_moved") -->
-				<!-- { -->
-					<!-- document.getElementById('defaultImg').src="scene2.png"; -->
-					<!-- document.getElementById("p1").innerHTML = "You moved the rock."; -->
-					<!-- state.rock_moved = "true"; -->
-				<!-- } -->
-			
-				<!-- else if(scene_dictionary[text] == "scene_drowned") -->
-				<!-- { -->
-					<!-- if(state.rock_moved == "true") -->
-						<!-- document.getElementById('defaultImg').src="scene4.png"; -->
-						
-					<!-- else -->
-						<!-- document.getElementById('defaultImg').src="scene3.png"; -->
-						
-					<!-- document.getElementById("p1").innerHTML = "You drowned :("; -->
-				<!-- } -->
-			
-				<!-- else -->
-					<!-- document.getElementById("p1").innerHTML = "I don't know what this means."; -->
-			<!-- } -->
-			
-			<!-- else -->
-				<!-- document.getElementById("p1").innerHTML = "I don't know what this means."; -->
+				document.getElementById("p1").innerHTML = "Scene not found error";
 		};
-		
-		function changeText(new_state)
-		{
-			document.getElementById("p1").innerHTML = "You moved the rock.";
-		}
 	</script>
 	
 </body>
