@@ -12,6 +12,7 @@
 </head>
 
 <body>
+	<p> Timer: <span id="timer">0</span></p>
 	<img id="defaultImg" width="1000" src="startscreen.png" alt="1"/>
 	<p id="p1">To start the game type play</p>
 	<input type="text" id="myText" value="Type something...">
@@ -248,6 +249,43 @@
 
 		};
 		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//timer code from this --> https://codepen.io/awkay/pen/ExzGea
+		
+		var timer; 
+		var timeLeft = 60; // seconds
+
+		// What to do when the timer runs out
+		function gameOver() 
+		{
+			// This cancels the setInterval, so the updateTimer stops getting called
+			cancelInterval(timer);
+		}
+
+		function updateTimer() 
+		{
+			timeLeft = timeLeft - 1;
+			
+			if(timeLeft >= 0)
+				document.getElementById("timer").innerHTML = timeLeft;
+			
+			else 
+			{
+				gameOver();
+			}
+		}
+
+		// The button has an on-click event handler that calls this
+		function start() 
+		{
+			// setInterval is a built-in function that will call the given function
+			// every N milliseconds (1 second = 1000 ms)
+			timer = setInterval(updateTimer, 1000);
+  
+			// It will be a whole second before the time changes, so we'll call the update
+			// once ourselves
+			updateTimer();
+		}
+//------------------------------------------------------------------------------------------------------------
 		
 		//Variable that keeps track of the current state
 		var state = "state_startscreen";
@@ -272,6 +310,9 @@
 			{
 				if(text in scene_dictionary[state]["actions"])
 				{
+					if(text == "play" && state == "state_startscreen")
+						start();
+					
 					state = scene_dictionary[state]["actions"][text];
 					document.getElementById('defaultImg').src=scene_dictionary[state]["png"];
 					document.getElementById("p1").innerHTML = scene_dictionary[state]["phrase"];
