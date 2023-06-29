@@ -19,7 +19,7 @@
 	<button id="button" onclick="sendText()">Enter</button>
 
 	<script>
-		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//The following is a dictionary of dictionaries that lists the states and their information
 		
 		var scene_dictionary=
@@ -236,6 +236,16 @@
 				},
 			},
 			
+			"state_timed_out":
+			{
+				"png":"scene10.png",
+				"phrase":"You took too long and the scorpion pokes you. You are now dead. Type restart to try again.",
+				"actions":
+				{
+					"restart":"state_startscreen"
+				},
+			},
+			
 			"state_win":
 			{
 				"png":"winscreen.png",
@@ -248,22 +258,26 @@
 			
 
 		};
-		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//timer code from this --> https://codepen.io/awkay/pen/ExzGea
 		
 		var timer; 
-		var timeLeft = 60; // seconds
+		var timeLeft = 100; // seconds
 
 		// What to do when the timer runs out
 		function gameOver() 
 		{
 			// This cancels the setInterval, so the updateTimer stops getting called
-			cancelInterval(timer);
+			clearInterval(timer);
+			state = "state_timed_out";
+			document.getElementById('defaultImg').src= scene_dictionary[state]["png"];
+			document.getElementById("p1").innerHTML = scene_dictionary[state]["phrase"];
 		}
 
 		function updateTimer() 
 		{
-			timeLeft = timeLeft - 1;
+			if(state != "state_drowning" && state != "state_win" && state != "state_timed_out" && state != "state_startscreen")
+				timeLeft = timeLeft - 1;
 			
 			if(timeLeft >= 0)
 				document.getElementById("timer").innerHTML = timeLeft;
@@ -274,9 +288,11 @@
 			}
 		}
 
-		// The button has an on-click event handler that calls this
+		//Called after play is sent during the start screen scene
 		function start() 
 		{
+			timeLeft = 100;
+		
 			// setInterval is a built-in function that will call the given function
 			// every N milliseconds (1 second = 1000 ms)
 			timer = setInterval(updateTimer, 1000);
@@ -285,7 +301,7 @@
 			// once ourselves
 			updateTimer();
 		}
-//------------------------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		
 		//Variable that keeps track of the current state
 		var state = "state_startscreen";
