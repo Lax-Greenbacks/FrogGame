@@ -328,6 +328,9 @@
 				{
 					if(text == "play" && state == "state_startscreen")
 						start();
+						
+					if((text == "restart") && state == "state_drowning" || state == "state_win")
+						gameOver();
 					
 					state = scene_dictionary[state]["actions"][text];
 					document.getElementById('defaultImg').src=scene_dictionary[state]["png"];
